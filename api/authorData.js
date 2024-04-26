@@ -1,9 +1,7 @@
-import { clientCredentials } from '../utils/client';
+const endpoint = 'http://localhost:8088';
 
-const endpoint = clientCredentials.databaseURL;
-
-const getAuthors = (uid) => new Promise((resolve, reject) => {
-  fetch(`${endpoint}/authors.json?orderBy="uid"&equalTo="${uid}"`, {
+const getAuthors = () => new Promise((resolve, reject) => {
+  fetch(`${endpoint}/authors`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -20,9 +18,8 @@ const getAuthors = (uid) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
-// FIXME: CREATE AUTHOR
 const createAuthor = (payload) => new Promise((resolve, reject) => {
-  fetch(`${endpoint}/authors.json`, {
+  fetch(`${endpoint}/authors`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -61,7 +58,7 @@ const deleteSingleAuthor = (firebaseKey) => new Promise((resolve, reject) => {
 });
 
 // FIXME: UPDATE AUTHOR
-const updateAuthor = () => {};
+const updateAuthor = () => { };
 
 // // TODO: GET A SINGLE AUTHOR'S BOOKS
 // const getAuthorBooks = (firebaseKey) => {
