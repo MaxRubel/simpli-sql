@@ -22,21 +22,13 @@ const AuthProvider = (props) => {
   // an object/value = user is logged in
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged((fbUser) => {
-      if (fbUser) {
-        setUser(fbUser);
-      } else {
-        setUser(false);
-      }
-    }); // creates a single global listener for auth state changed
+    setUser(true)
   }, []);
 
-  const value = useMemo( // https://reactjs.org/docs/hooks-reference.html#usememo
+  const value = useMemo(
     () => ({
       user,
       userLoading: user === null,
-      // as long as user === null, will be true
-      // As soon as the user value !== null, value will be false
     }),
     [user],
   );

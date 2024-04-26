@@ -13,6 +13,7 @@ export default function ViewAuthorsPage() {
   // TODO: make call to API layer to get the data
   useEffect(() => {
     getAuthors(user.uid).then((data) => {
+      // console.log(data);
       const sortedData = data.sort((a, b) => a.first_name.localeCompare(b.first_name));
       setAuthors(sortedData);
     });

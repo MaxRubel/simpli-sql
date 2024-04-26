@@ -11,6 +11,7 @@ import { createBook, updateBook } from '../../api/bookData';
 const initialState = {
   first_name: '',
   last_name: '',
+  image: '',
   email: '',
   favorite: false,
 };
@@ -39,12 +40,8 @@ function AuthorForm({ obj }) {
     if (obj.firebaseKey) {
       updateAuthor(formInput).then(() => router.push(`/book/${obj.firebaseKey}`));
     } else {
-      const payload = { ...formInput, uid: user.uid };
-      createAuthor(payload).then(({ name }) => {
-        const patchPayload = { firebaseKey: name };
-        updateAuthor(patchPayload).then(() => {
-          router.push('/');
-        });
+      createAuthor(formInput).then(() => {
+        router.push('/authors/view-all');
       });
     }
   };
@@ -84,6 +81,17 @@ function AuthorForm({ obj }) {
           placeholder="Enter an Email"
           name="email"
           value={formInput.email}
+          onChange={handleChange}
+          required
+        />
+      </FloatingLabel>
+
+      <FloatingLabel controlId="floatingInput3" label="Image" className="mb-3">
+        <Form.Control
+          type="text"
+          placeholder="Add an Image"
+          name="image"
+          value={formInput.image}
           onChange={handleChange}
           required
         />
