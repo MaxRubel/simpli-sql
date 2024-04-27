@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { viewAuthorDetails } from '../../api/mergedData';
+import { getSingleAuthor } from '../../api/authorData';
 
 export default function ViewAuthor() {
   const [authorDetails, setAuthorDetails] = useState(
@@ -9,28 +10,28 @@ export default function ViewAuthor() {
   );
   const router = useRouter();
 
-  // TODO: grab firebaseKey from url
   const { firebaseKey } = router.query;
 
-  // TODO: make call to API layer to get the data
   useEffect(() => {
-    viewAuthorDetails(firebaseKey).then((data) => {
-      setAuthorDetails(data);
-    });
+    getSingleAuthor(firebaseKey).then(setAuthorDetails);
   }, [firebaseKey]);
+
+  const handleBack = () => {
+    router.push('/authors/view-all');
+  };
 
   return (
     <>
       <div className="mt-5 d-flex flex-wrap">
         <div className="d-flex flex-column">
-          {authorDetails.books.length > 0 && (
+
           <img
             width={300}
-            src={authorDetails.books[0].image}
-            alt={authorDetails.firebaseKey}
+            src={authorDetails.image}
+            alt={authorDetails.id}
             style={{ width: '300px' }}
           />
-          )}
+
           <div className="mt-5">
             <i id="edit" className="fas fa-edit btn btn-info" />
             <i id="delete" className="btn btn-danger fas fa-trash-alt" />
@@ -43,7 +44,13 @@ export default function ViewAuthor() {
         </div>
       </div>
       <div>
-        <button type="button" id="authorBack" className="btn btn-light">Back</button>
+        <button
+          type="button"
+          id="authorBack"
+          onClick={handleBack}
+          className="btn btn-light"
+        >Back
+        </button>
       </div>
     </>
   );

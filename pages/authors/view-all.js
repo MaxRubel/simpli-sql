@@ -38,7 +38,7 @@ export default function ViewAuthorsPage() {
       </div>
       <div className="authors-container" style={{ display: 'flex', flexWrap: 'wrap' }}>
         {authors.map((author) => (
-          <AuthorCard key={author.firebaseKey} authorObj={author} onUpdate={getAllAuthors} />
+          <AuthorCard key={author.id} authorObj={author} onUpdate={getAllAuthors} />
         ))}
       </div>
     </>

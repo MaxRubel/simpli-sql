@@ -1,26 +1,20 @@
+/* eslint-disable react/prop-types */
 // import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Card, Button } from 'react-bootstrap';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { deleteAuthorBooks } from '../api/mergedData';
 import { deleteSingleAuthor } from '../api/authorData';
 
 const AuthorCard = ({ authorObj, onUpdate }) => {
-  // const [author, setAuthor] = useState({});
-
-  // useEffect(() => {
-  //   setAuthor(authorObj);
-  // }, [authorObj]); // Include authorObj in the dependency array
+  const router = useRouter();
 
   const deleteThisAuthor = () => {
     if (window.confirm(`Delete ${authorObj.first_name} ${authorObj.last_name}?`)) {
-      deleteSingleAuthor(authorObj.firebaseKey)
-        .then(() => {
-          deleteAuthorBooks(authorObj.firebaseKey)
-            .then(() => {
-              onUpdate();
-            });
-        });
+      deleteSingleAuthor(authorObj.id).then(() => {
+        onUpdate();
+      });
     }
   };
 
@@ -29,11 +23,17 @@ const AuthorCard = ({ authorObj, onUpdate }) => {
       <Card.Body>
         <Card.Title>{`${authorObj.first_name} ${authorObj.last_name}`}</Card.Title>
         <Card.Subtitle>{authorObj.email}</Card.Subtitle>
-        <Link href={`/authors/${authorObj.firebaseKey}`} passHref>
+        <Link href={`/authors/${authorObj.id}`} passHref>
           <Button variant="success">VIEW</Button>
         </Link>
-        <Link href={`/authors/edit/${authorObj.firebaseKey}`} passHref>
-          <Button variant="info">EDIT</Button>
+        <Link href={`/authors/edit/${authorObj.id}`} passHref>
+          <Button
+            variant="info"
+            onClick={() => {
+              router.push(`/authors/edit/${authorObj.id}`);
+            }}
+          >EDIT
+          </Button>
         </Link>
         <Button variant="danger" className="m-2" onClick={deleteThisAuthor}>
           DELETE
