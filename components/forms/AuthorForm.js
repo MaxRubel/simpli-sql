@@ -1,14 +1,13 @@
+/* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import PropTypes from 'prop-types';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import { Button } from 'react-bootstrap';
-import { useAuth } from '../../utils/context/authContext';
-import { createAuthor, getAuthors, updateAuthor } from '../../api/authorData';
-import { createBook, updateBook } from '../../api/bookData';
+import { createAuthor, updateAuthor } from '../../api/authorData';
 
 const initialState = {
+  id: '',
   first_name: '',
   last_name: '',
   image: '',
@@ -18,14 +17,11 @@ const initialState = {
 
 function AuthorForm({ obj }) {
   const [formInput, setFormInput] = useState(initialState);
-  const [authors, setAuthors] = useState([]);
   const router = useRouter();
-  const { user } = useAuth();
 
   useEffect(() => {
-    getAuthors(user.uid).then(setAuthors);
-    if (obj.firebaseKey) setFormInput(obj);
-  }, [obj, user]);
+    if (obj?.id) setFormInput(obj);
+  }, [obj]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -37,8 +33,10 @@ function AuthorForm({ obj }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (obj.firebaseKey) {
-      updateAuthor(formInput).then(() => router.push(`/book/${obj.firebaseKey}`));
+    if (obj?.id) {
+      updateAuthor(formInput).then(() => {
+        router.push(`/authors/${formInput.id}`);
+      });
     } else {
       createAuthor(formInput).then(() => {
         router.push('/authors/view-all');
@@ -48,7 +46,7 @@ function AuthorForm({ obj }) {
 
   return (
     <Form onSubmit={handleSubmit}>
-      <h2 className="text-white mt-5">{obj.firebaseKey ? 'Update' : 'Create'} Author</h2>
+      <h2 className="text-white mt-5">{obj?.id ? 'Update' : 'Create'} Author</h2>
 
       {/* FIRST NAME INPUT  */}
       <FloatingLabel controlId="floatingInput1" label="First Name" className="mb-3">
@@ -104,33 +102,31 @@ function AuthorForm({ obj }) {
         id="favorite"
         name="favorite"
         label="Favorite?"
-        checked={formInput.sale}
+        checked={formInput.favorite}
         onChange={(e) => {
           setFormInput((prevState) => ({
             ...prevState,
-            favorite: e.target.checked,
+            favorite: e.target.checked ? 1 : 0,
           }));
         }}
       />
-
-      {/* SUBMIT BUTTON  */}
-      <Button type="submit">{obj.firebaseKey ? 'Update' : 'Create'} Author</Button>
+      <Button type="submit">{obj?.id ? 'Update' : 'Create'} Author</Button>
     </Form>
   );
 }
 
-AuthorForm.propTypes = {
-  obj: PropTypes.shape({
-    first_name: PropTypes.string,
-    last_name: PropTypes.string,
-    email: PropTypes.string,
-    favorite: PropTypes.bool,
-    firebaseKey: PropTypes.string,
-  }),
-};
+// AuthorForm.propTypes = {
+//   obj: PropTypes.shape({
+//     id: PropTypes.number,
+//     first_name: PropTypes.string,
+//     last_name: PropTypes.string,
+//     email: PropTypes.string,
+//     favorite: PropTypes.number,
+//   }),
+// };
 
-AuthorForm.defaultProps = {
-  obj: initialState,
-};
+// AuthorForm.defaultProps = {
+//   obj: initialState,
+// };
 
 export default AuthorForm;

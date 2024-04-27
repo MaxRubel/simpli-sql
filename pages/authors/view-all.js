@@ -12,8 +12,7 @@ export default function ViewAuthorsPage() {
 
   // TODO: make call to API layer to get the data
   useEffect(() => {
-    getAuthors(user.uid).then((data) => {
-      // console.log(data);
+    getAuthors().then((data) => {
       const sortedData = data.sort((a, b) => a.first_name.localeCompare(b.first_name));
       setAuthors(sortedData);
     });
@@ -38,7 +37,7 @@ export default function ViewAuthorsPage() {
       </div>
       <div className="authors-container" style={{ display: 'flex', flexWrap: 'wrap' }}>
         {authors.map((author) => (
-          <AuthorCard key={author.firebaseKey} authorObj={author} onUpdate={getAllAuthors} />
+          <AuthorCard key={author.id} authorObj={author} onUpdate={getAllAuthors} />
         ))}
       </div>
     </>
