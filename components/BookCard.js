@@ -7,10 +7,6 @@ import Link from 'next/link';
 import { deleteBook } from '../api/bookData';
 
 function BookCard({ bookObj, onUpdate }) {
-  if (bookObj.sale) {
-    console.log('true');
-  }
-  // console.log(bookObj.sale);
   const deleteThisBook = () => {
     if (window.confirm(`Delete ${bookObj.title}?`)) {
       deleteBook(bookObj.firebaseKey).then(() => onUpdate());
