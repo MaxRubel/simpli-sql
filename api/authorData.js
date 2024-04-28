@@ -54,7 +54,6 @@ const deleteSingleAuthor = (id) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
-// FIXME: UPDATE AUTHOR
 const updateAuthor = (payload) => new Promise((resolve, reject) => {
   fetch(`${endpoint}/authors/${payload.id}`, {
     method: 'PUT',

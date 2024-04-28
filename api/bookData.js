@@ -1,10 +1,10 @@
 import { clientCredentials } from '../utils/client';
 // API CALLS FOR BOOKS
 
-const endpoint = clientCredentials.databaseURL;
+const endpoint = 'http://localhost:8088';
 
-const getBooks = (uid) => new Promise((resolve, reject) => {
-  fetch(`${endpoint}/books.json?orderBy="uid"&equalTo="${uid}"`, {
+const getBooks = () => new Promise((resolve, reject) => {
+  fetch(`${endpoint}/books`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -43,7 +43,7 @@ const getSingleBook = (firebaseKey) => new Promise((resolve, reject) => {
 
 // TODO: CREATE BOOK
 const createBook = (payload) => new Promise((resolve, reject) => {
-  fetch(`${endpoint}/books.json`, {
+  fetch(`${endpoint}/books`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

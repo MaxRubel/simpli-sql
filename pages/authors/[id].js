@@ -10,11 +10,11 @@ export default function ViewAuthor() {
   );
   const router = useRouter();
 
-  const { firebaseKey } = router.query;
+  const { id } = router.query;
 
   useEffect(() => {
-    getSingleAuthor(firebaseKey).then(setAuthorDetails);
-  }, [firebaseKey]);
+    getSingleAuthor(id).then(setAuthorDetails);
+  }, [id]);
 
   const handleBack = () => {
     router.push('/authors/view-all');
@@ -22,8 +22,14 @@ export default function ViewAuthor() {
 
   return (
     <>
-      <div className="mt-5 d-flex flex-wrap">
-        <div className="d-flex flex-column">
+      <div
+        className="mt-5 d-flex flex-wrap"
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >
+        <div>
 
           <img
             width={300}
@@ -32,26 +38,31 @@ export default function ViewAuthor() {
             style={{ width: '300px' }}
           />
 
-          <div className="mt-5">
-            <i id="edit" className="fas fa-edit btn btn-info" />
-            <i id="delete" className="btn btn-danger fas fa-trash-alt" />
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <button type="button" id="edit" className="fas fa-edit btn btn-info">Edit</button>
+            <button type="button" id="delete" className="btn btn-danger fas fa-trash-alt">Delete</button>
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'left',
+              flexDirection: 'column',
+              color: 'white',
+            }}
+          >
+            <h5>{authorDetails.first_name} {authorDetails.last_name}</h5>
+            <div>Author Email: <a href="hey">{authorDetails.email}</a></div>
+            <p>{authorDetails.description || ''}</p>
           </div>
         </div>
-        <div className="text-white ms-5 details">
-          <h5>{authorDetails.first_name} {authorDetails.last_name}</h5>
-          Author Email: <a href="hey">{authorDetails.email}</a>
-          <p>{authorDetails.description || ''}</p>
-        </div>
       </div>
-      <div>
-        <button
-          type="button"
-          id="authorBack"
-          onClick={handleBack}
-          className="btn btn-light"
-        >Back
-        </button>
-      </div>
+      <button
+        type="button"
+        id="authorBack"
+        onClick={handleBack}
+        className="btn btn-light"
+      >Back
+      </button>
     </>
   );
   // {authorDetails.favorite ? '<span class="badge bg-danger"><i class="fa fa-heart" aria-hidden="true"></i></span>' : ''}

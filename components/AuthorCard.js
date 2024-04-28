@@ -23,21 +23,23 @@ const AuthorCard = ({ authorObj, onUpdate }) => {
       <Card.Body>
         <Card.Title>{`${authorObj.first_name} ${authorObj.last_name}`}</Card.Title>
         <Card.Subtitle>{authorObj.email}</Card.Subtitle>
-        <Link href={`/authors/${authorObj.id}`} passHref>
-          <Button variant="success">VIEW</Button>
-        </Link>
-        <Link href={`/authors/edit/${authorObj.id}`} passHref>
-          <Button
-            variant="info"
-            onClick={() => {
-              router.push(`/authors/edit/${authorObj.id}`);
-            }}
-          >EDIT
+        <div style={{ paddingTop: '10px', display: 'flex', gap: '10px' }}>
+          <Link href={`/authors/${authorObj.id}`} passHref>
+            <Button variant="success">VIEW</Button>
+          </Link>
+          <Link href={`/authors/edit/${authorObj.id}`} passHref>
+            <Button
+              variant="info"
+              onClick={() => {
+                router.push(`/authors/edit/${authorObj.id}`);
+              }}
+            >EDIT
+            </Button>
+          </Link>
+          <Button variant="danger" onClick={deleteThisAuthor}>
+            DELETE
           </Button>
-        </Link>
-        <Button variant="danger" className="m-2" onClick={deleteThisAuthor}>
-          DELETE
-        </Button>
+        </div>
       </Card.Body>
     </Card>
   );
