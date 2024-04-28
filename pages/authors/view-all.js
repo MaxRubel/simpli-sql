@@ -35,7 +35,7 @@ export default function ViewAuthorsPage() {
           <Button type="button">Add Author</Button>
         </Link>
       </div>
-      <div className="authors-container" style={{ display: 'flex', flexWrap: 'wrap' }}>
+      <div className="authors-container" style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
         {authors.map((author) => (
           <AuthorCard key={author.id} authorObj={author} onUpdate={getAllAuthors} />
         ))}

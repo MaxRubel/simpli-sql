@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
@@ -7,6 +8,7 @@ import { Button } from 'react-bootstrap';
 import { useAuth } from '../../utils/context/authContext';
 import { getAuthors } from '../../api/authorData';
 import { createBook, updateBook } from '../../api/bookData';
+import createAuthorBook from '../../api/authorBook';
 
 const initialState = {
   description: '',
@@ -23,9 +25,9 @@ function BookForm({ obj }) {
   const { user } = useAuth();
 
   useEffect(() => {
-    getAuthors(user.uid).then(setAuthors);
+    getAuthors().then(setAuthors);
 
-    if (obj.firebaseKey) setFormInput(obj);
+    if (obj.id) setFormInput(obj);
   }, [obj, user]);
 
   const handleChange = (e) => {
@@ -38,15 +40,15 @@ function BookForm({ obj }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (obj.firebaseKey) {
-      updateBook(formInput).then(() => router.push(`/book/${obj.firebaseKey}`));
+    if (obj.id) {
+      updateBook(formInput).then(() => router.push(`/book/${obj.id}`));
     } else {
-      const payload = { ...formInput, uid: user.uid };
-      createBook(payload).then(({ name }) => {
-        const patchPayload = { firebaseKey: name };
-        updateBook(patchPayload).then(() => {
-          router.push('/');
-        });
+      createBook(formInput).then((data) => {
+        const payload = {
+          author_id: data.author_id,
+          book_id: data.id,
+        };
+        createAuthorBook(payload);
       });
     }
   };
@@ -98,15 +100,15 @@ function BookForm({ obj }) {
           name="author_id"
           onChange={handleChange}
           className="mb-3"
-          value={obj.author_id} // FIXME: modify code to remove error
+          value={obj.author_id}
           required
         >
           <option value="">Select an Author</option>
           {
             authors.map((author) => (
               <option
-                key={author.firebaseKey}
-                value={author.firebaseKey}
+                key={author.id}
+                value={author.id}
               >
                 {author.first_name} {author.last_name}
               </option>
