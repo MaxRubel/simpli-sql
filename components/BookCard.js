@@ -9,7 +9,7 @@ import { deleteBook } from '../api/bookData';
 function BookCard({ bookObj, onUpdate }) {
   const deleteThisBook = () => {
     if (window.confirm(`Delete ${bookObj.title}?`)) {
-      deleteBook(bookObj.firebaseKey).then(() => onUpdate());
+      deleteBook(bookObj.id).then(() => onUpdate());
     }
   };
 

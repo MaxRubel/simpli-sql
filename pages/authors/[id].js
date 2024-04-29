@@ -2,7 +2,8 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { viewAuthorDetails } from '../../api/mergedData';
-import { getSingleAuthor } from '../../api/authorData';
+import { deleteSingleAuthor, getSingleAuthor } from '../../api/authorData';
+import Loading from '../../components/Loading';
 
 export default function ViewAuthor() {
   const [authorDetails, setAuthorDetails] = useState(
@@ -19,6 +20,22 @@ export default function ViewAuthor() {
   const handleBack = () => {
     router.push('/authors/view-all');
   };
+
+  const handleDelete = () => {
+    if (window.confirm(`Delete ${authorDetails.first_name} ${authorDetails.last_name}?`)) {
+      deleteSingleAuthor(authorDetails.id).then(() => {
+        router.push('/authors/view-all');
+      });
+    }
+  };
+
+  const handleEdit = () => {
+    router.push(`/authors/edit/${authorDetails.id}`);
+  };
+
+  if (!authorDetails.id) {
+    return (<Loading />);
+  }
 
   return (
     <>
@@ -39,8 +56,20 @@ export default function ViewAuthor() {
           />
 
           <div style={{ display: 'flex', gap: '10px' }}>
-            <button type="button" id="edit" className="fas fa-edit btn btn-info">Edit</button>
-            <button type="button" id="delete" className="btn btn-danger fas fa-trash-alt">Delete</button>
+            <button
+              type="button"
+              id="edit"
+              onClick={handleEdit}
+              className="fas fa-edit btn btn-info"
+            >Edit
+            </button>
+            <button
+              type="button"
+              onClick={handleDelete}
+              id="delete"
+              className="btn btn-danger fas fa-trash-alt"
+            >Delete
+            </button>
           </div>
           <div
             style={{

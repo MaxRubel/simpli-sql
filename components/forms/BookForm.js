@@ -26,8 +26,14 @@ function BookForm({ obj }) {
 
   useEffect(() => {
     getAuthors().then(setAuthors);
-
     if (obj.id) setFormInput(obj);
+    if (obj.authors?.length > 0) {
+      setFormInput((preVal) => ({
+        ...preVal,
+        author_id: obj.authors[0].id,
+        author: obj.authors[0],
+      }));
+    }
   }, [obj, user]);
 
   const handleChange = (e) => {
@@ -41,21 +47,32 @@ function BookForm({ obj }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (obj.id) {
-      updateBook(formInput).then(() => router.push(`/book/${obj.id}`));
-    } else {
-      createBook(formInput).then((data) => {
+      updateBook(formInput).then(() => {
         const payload = {
-          author_id: data.author_id,
-          book_id: data.id,
+          book_id: formInput.id,
+          author_id: formInput.author_id,
         };
-        createAuthorBook(payload);
+        createAuthorBook(payload).then(() => {
+          router.push(`/books/${obj.id}`);
+        });
       });
+    } else {
+      createBook(formInput)
+        .then((data) => {
+          const payload = {
+            author_id: data.author_id,
+            book_id: data.id,
+          };
+          createAuthorBook(payload).then(() => {
+            router.push('/');
+          });
+        });
     }
   };
 
   return (
     <Form onSubmit={handleSubmit}>
-      <h2 className="text-white mt-5">{obj.firebaseKey ? 'Update' : 'Create'} Book</h2>
+      <h2 className="text-white mt-5">{obj.id ? 'Update' : 'Create'} Book</h2>
 
       {/* TITLE INPUT  */}
       <FloatingLabel controlId="floatingInput1" label="Book Title" className="mb-3">
@@ -84,7 +101,8 @@ function BookForm({ obj }) {
       {/* PRICE INPUT  */}
       <FloatingLabel controlId="floatingInput3" label="Book Price" className="mb-3">
         <Form.Control
-          type="text"
+          type="number"
+          step={0.01}
           placeholder="Enter price"
           name="price"
           value={formInput.price}
@@ -103,7 +121,10 @@ function BookForm({ obj }) {
           value={obj.author_id}
           required
         >
-          <option value="">Select an Author</option>
+          {formInput.author ? (
+            <option value={formInput.author.id}>{formInput.author.first_name} {formInput.author.last_name}</option>)
+            : <option value="">Select an Author</option> }
+          {/* <option value={formInput.author.id}>Select an Author</option> */}
           {
             authors.map((author) => (
               <option
@@ -147,7 +168,7 @@ function BookForm({ obj }) {
       />
 
       {/* SUBMIT BUTTON  */}
-      <Button type="submit">{obj.firebaseKey ? 'Update' : 'Create'} Book</Button>
+      <Button type="submit">{obj.id ? 'Update' : 'Create'} Book</Button>
     </Form>
   );
 }

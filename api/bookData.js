@@ -15,22 +15,19 @@ const getBooks = () => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
-// TODO: DELETE BOOK
-const deleteBook = (firebaseKey) => new Promise((resolve, reject) => {
-  fetch(`${endpoint}/books/${firebaseKey}.json`, {
+const deleteBook = (id) => new Promise((resolve, reject) => {
+  fetch(`${endpoint}/books/${id}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
     },
   })
-    .then((response) => response.json())
-    .then((data) => resolve(data))
+    .then((response) => resolve(response))
     .catch(reject);
 });
 
-// TODO: GET SINGLE BOOK
-const getSingleBook = (firebaseKey) => new Promise((resolve, reject) => {
-  fetch(`${endpoint}/books/${firebaseKey}.json`, {
+const getSingleBook = (id) => new Promise((resolve, reject) => {
+  fetch(`${endpoint}/books/${id}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -41,7 +38,6 @@ const getSingleBook = (firebaseKey) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
-// TODO: CREATE BOOK
 const createBook = (payload) => new Promise((resolve, reject) => {
   fetch(`${endpoint}/books`, {
     method: 'POST',
@@ -51,21 +47,21 @@ const createBook = (payload) => new Promise((resolve, reject) => {
     body: JSON.stringify(payload),
   })
     .then((response) => response.json())
-    .then((data) => resolve(data))
+    .then((data) => {
+      resolve(data);
+    })
     .catch(reject);
 });
 
-// TODO: UPDATE BOOK
 const updateBook = (payload) => new Promise((resolve, reject) => {
-  fetch(`${endpoint}/books/${payload.firebaseKey}.json`, {
-    method: 'PATCH',
+  fetch(`${endpoint}/books/${payload.id}`, {
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(payload),
   })
-    .then((response) => response.json())
-    .then((data) => resolve(data))
+    .then(resolve)
     .catch(reject);
 });
 

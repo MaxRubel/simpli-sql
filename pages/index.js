@@ -20,11 +20,13 @@ function Home() {
   }, []);
 
   return (
-    <div className="text-center my-4">
-      <Link href="/books/new" passHref>
-        <Button>Add A Book</Button>
-      </Link>
-      <div className="d-flex flex-wrap">
+    <div className="text-center my-4" style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
+      <div>
+        <Link href="/books/new" passHref>
+          <Button style={{ width: '18rem', margin: '10px' }}>Add A Book</Button>
+        </Link>
+      </div>
+      <div className="d-flex flex-wrap" style={{ justifyContent: 'center' }}>
         {books.map((book) => (
           <BookCard key={book.id} bookObj={book} onUpdate={getAllTheBooks} />
         ))}
